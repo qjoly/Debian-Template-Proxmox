@@ -1,0 +1,6 @@
+- import_playbook: install-tools.yml
+#  - import_playbook: add-ssh.yml
+#  - import_playbook: postinstall-vm.yml
+#  - import_playbook: install-pve.yml
+#  - import_playbook: install-docker.yml
+

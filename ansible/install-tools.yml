@@ -1,0 +1,162 @@
+---
+- hosts: all
+#  collections:
+#    - community.crypto
+#    - ansible.posix
+
+#  remote_user: deploy
+#  become: yes
+#  become_user: root
+#  become_method: sudo
+
+  gather_facts: true
+
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+
+  tasks:
+  - name: "Install packages"
+    apt:
+      name: "{{item}}"
+      state: present
+    loop:
+      - vim
+      - exa
+      - grc
+      - most
+      - highlight
+      - source-highlight
+      - python3-pygments
+      - gawk
+      - python3-apt
+
+  - name: configure .vimrc
+    copy:
+      content: 'set mouse=r'
+      dest: "/root/.vimrc"
+      owner: root
+      group: root
+      mode: '0644'
+  
+  - name: config /etc/vim/vimrc syntax on
+    lineinfile:
+      path: /etc/vim/vimrc
+      regexp: '^"syntax on'
+      line: syntax on
+
+  - name: config /etc/vim/vimrc set background=dark
+    lineinfile:
+      path: /etc/vim/vimrc
+      regexp: '^"set background=dark'
+      line: set background=dark
+
+  - name: config .bashrc add cat color alias
+    lineinfile:
+      path: /root/.bashrc
+      line: 'alias cat="highlight -O ansi --force --syntax=bash"'
+      create: no
+
+  - name: config .bashrc set alias ll
+    lineinfile:
+      path: /root/.bashrc
+      regexp: '^# alias ll(.*)'
+      line: 'alias ll\1'
+      backrefs: yes
+
+  - name: config .bashrc set alias ls
+    lineinfile:
+      path: /root/.bashrc
+      regexp: '^# alias ls(.*)'
+      line: 'alias ls\1'
+      backrefs: yes
+
+  - name: config .bashrc set alias l
+    lineinfile:
+      path: /root/.bashrc
+      regexp: '^# alias l(.*)'
+      line: 'alias l\1'
+      backrefs: yes
+
+  - name: config .bashrc set export LSOPTIONS
+    lineinfile:
+      path: /root/.bashrc
+      regexp: '^# export LS_OPTIONS(.*)'
+      line: 'export LS_OPTIONS\1'
+      backrefs: yes
+
+  - name: config .bashrc set eval OPTIONS
+    lineinfile:
+      path: /root/.bashrc
+      regexp: '^# eval(.*)'
+      line: '# eval\1'
+      backrefs: yes
+
+
+  - name: config .bashrc add vim alias
+    lineinfile:
+      path: /root/.bashrc
+      line: "alias vi='vim'"
+      create: no
+
+  - name: config .bashrc add export LESS Color1
+    lineinfile:
+      path: /root/.bashrc
+      line: 'export LESSOPEN="| /usr/share/source-highlight/src-hilite-lesspipe.sh %s"'
+      create: no
+
+  - name: config .bashrc add export LESS Color2
+    lineinfile:
+      path: /root/.bashrc
+      line: "export LESS=' -R'"
+      create: no
+
+  - name: config .bashrc add export pager
+    lineinfile:
+      path: /root/.bashrc
+      line: 'export PAGER="most"'
+      create: no
+
+  - name: config .bashrc alias grep color
+    lineinfile:
+      path: /root/.bashrc
+      line: "alias grep='grep --color=auto'"
+      create: no
+
+  - name: configure yaml color syntax
+    copy:
+      dest: "/usr/share/source-highlight/yaml.lang"
+      owner: root
+      group: root
+      mode: '0644'
+      content: |
+        include "script_comment.lang"
+        include "number.lang"
+        keyword = "true|false|null"
+        section start '^---'
+        (symbol,name,symbol) = `(^[[:blank:]-]*)([[:alnum:]_]+)(:)`
+        symbol = '^[[:blank:]]*-'
+        string delim "\"" "\"" escape "\\"
+        string delim "'" "'"  escape "\\"
+
+  - name: config lang.map yaml
+    lineinfile:
+      path: /usr/share/source-highlight/lang.map
+      line: 'yaml = yaml.lang'
+      create: no
+
+  - name: config lang.map yaml
+    lineinfile:
+      path: /usr/share/source-highlight/lang.map
+      line: 'yml = yaml.lang'
+      create: no
+
+  - name: config .bashrc set Prompt
+    lineinfile:
+      path: /root/.bashrc
+#      line: 'export PS1="\[\033[1;31m\]\u\[\033[0;37m\]@\[\033[1;32m\]\h\[\033[00m\]:\[\033[1;34m\]\w\[\033[00m\] (\d - \t)\n\$ '"
+      line: "export PS1='\\[\\033[1;31m\\]\\u\\[\\033[0;37m\\]@\\[\\033[1;32m\\]\\h\\[\\033[00m\\]:\\[\\033[1;34m\\]\\w\\[\\033[00m\\] (\\d - \\t)\\n\\$ '"
+      create: no
+
+#  - name: sourcing .bashrc
+#    shell: . ~/.bashrc
+

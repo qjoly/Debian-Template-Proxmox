@@ -1,0 +1,42 @@
+#!/bin/sh
+# this hack has to be in sync with the partman config in the preseed
+# remove the partition table of /dev/vda, it should not exist on a clean install
+
+sizeBoot=1024
+sizeSwap=1024
+
+disk1=$(list-devices disk | cut -d / -f 3 | head -1)
+
+sleep 5
+#
+swapoff /dev/mapper/vg00-swap_1
+# remember to specify the correct volume group !
+vgremove -ff vg00
+pvremove /dev/${disk1}2
+dd if=/dev/zero of=/dev/${disk1} bs=512 count=1
+
+# reread the partition table
+blockdev --rereadpt /dev/${disk1}
+sleep 1
+
+parted --align=opt --script /dev/${disk1} \
+                        mktable msdos \
+                        unit Mib \
+                        mkpart primary 1 $sizeBoot \
+                        mkpart primary $sizeBoot 100% \
+                        set 1 boot on
+#
+# /boot
+mkfs.ext4 -Fq /dev/${disk1}1
+
+# /root
+pvcreate -fy /dev/${disk1}2
+vgcreate -fy vg00 /dev/${disk1}2
+# swap
+lvcreate -y -Wy -L ${sizeSwap}M -n swap_1 vg00
+# rootfs
+lvcreate -y -Wy -l+100%FREE -n root vg00
+
+mkswap /dev/mapper/vg00-swap_1
+mkfs.ext4 -Fq /dev/mapper/vg00-root
+

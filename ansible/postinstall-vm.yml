@@ -1,0 +1,52 @@
+- hosts: all
+  collections:
+    - community.crypto
+    - ansible.posix
+
+  gather_facts: true
+  vars:
+    docker_compose_path: "/root/services/deploy-machines"
+    ansible_python_interpreter: /usr/bin/python3
+
+  tasks:
+#    - name: Wait 30 seconds, but only start checking after 30 seconds
+#      wait_for_connection:
+#        delay: 30
+#        timeout: 30
+
+    - name: Update all packages to the latest version
+      apt:
+        upgrade: dist
+        autoremove: true
+      become: true
+
+    - block:
+      - name: Add public SSH key for the root user
+        authorized_key:
+          user: root
+          key: "{{ lookup('env', 'pubkeymasterdeploy') }}"
+          state: present
+          exclusive: true
+      when: pubkeymasterdeploy is defined
+
+    - name: configure .vimrc
+      copy:
+        src: "{{ lookup('env', 'PWD') }}/src/.vimrc"
+        dest: "/root/"
+
+    - name: config /etc/vim/vimrc syntax on
+      lineinfile:
+        path: /etc/vim/vimrc
+        regexp: '^"syntax on'
+        line: syntax on
+
+    - name: config /etc/vim/vimrc set background=dark
+      lineinfile:
+        path: /etc/vim/vimrc
+        regexp: '^"set background=dark'
+        line: set background=dark
+
+    - name: Generate an OpenSSH keypair with the default values (4096 bits, rsa)
+      community.crypto.openssh_keypair:
+        path: /root/.ssh/id_rsa
+

@@ -1,0 +1,23 @@
+---
+- hosts: all
+  gather_facts: true
+
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+  tasks:
+  
+  - name: Show keys to add
+    debug: 
+      msg:  "{{ item }}"
+    loop: "{{ lookup('fileglob', '../ssh/*.pub', wantlist=True) }}"
+  
+  - name: Set authorized key took from file
+    authorized_key:
+      user: root 
+      state: present
+      key: "{{ lookup('pipe','cat ../ssh/*.pub') }}"
+#    with_file:
+#      - ../ssh/*.pub
+      #      - ../ssh/*.pub
+      #    loop: "{{ lookup('fileglob', '../ssh/*.pub', wantlist=True) }}"
+
