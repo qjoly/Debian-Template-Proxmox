@@ -1,0 +1,13 @@
+name: Validate Packer
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Validate Code
+      uses: dawitnida/packer-validate-action@v1.0.5
