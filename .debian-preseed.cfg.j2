@@ -18,7 +18,7 @@ d-i	mirror/http/directory string /debian
 d-i	mirror/http/proxy string
 
 d-i	netcfg/get_hostname string {{ vm_name }}
-d-i	netcfg/get_domain string forky.ovh
+#d-i	netcfg/get_domain string forky.ovh
 
 ### Apt setup
 # You can choose to install non-free and contrib software.
@@ -43,14 +43,11 @@ d-i     partman/confirm_nooverwrite boolean true
 d-i	partman-lvm/confirm boolean true
 d-i	partman-lvm/confirm_nooverwrite boolean true
 
-# fstab utilisera des UUID plutôt que des noms de périphériques
 d-i	partman/mount_style select uuid
-
 d-i     clock-setup/utc boolean true
 d-i     clock-setup/ntp boolean true
 d-i     clock-setup/ntp-server  string ntp.ubuntu.com
 d-i     time/zone string Europe/Paris
-
 #d-i     base-installer/kernel/image     string linux-server
 
 # users
@@ -102,19 +99,13 @@ d-i preseed/late_command string \
 	curl \
 	vim \
 	net-tools; \
-	in-target sed -i 's/ens3/ens18/g' /etc/network/interfaces; \
-	in-target sed -i '/^#PermitRootLogin/c\PermitRootLogin yes' /etc/ssh/sshd_config; \
-        in-target sed -i 's/# alias ll/alias ll/g' /root/.bashrc; \
-        in-target sed -i 's/# alias ls/alias ls/g' /root/.bashrc; \
-        in-target sed -i 's/# alias l/alias l/g' /root/.bashrc; \
-        in-target sed -i 's/# export LS_OPTIONS/export LS_OPTIONS/g' /root/.bashrc; \
-        in-target sed -i 's/# eval/eval/g' /root/.bashrc; \
+	in-target sed -i ‘s/ens3/ens18/g’ /etc/network/interfaces; \
+	in-target sed -i ’/^#PermitRootLogin/c\PermitRootLogin yes’ /etc/ssh/sshd_config; \
+        in-target sed -i ‘s/# alias ll/alias ll/g’ /root/.bashrc; \
+        in-target sed -i ‘s/# alias ls/alias ls/g’ /root/.bashrc; \
+        in-target sed -i ‘s/# alias l/alias l/g’ /root/.bashrc; \
+        in-target sed -i ‘s/# export LS_OPTIONS/export LS_OPTIONS/g’ /root/.bashrc; \
+        in-target sed -i ‘s/# eval/eval/g’ /root/.bashrc; \
 	in-target update-grub; 
 
-postfix postfix/main_mailer_type        select  Local only
-postfix postfix/root_address    string root@localhost
-postfix postfix/mynetworks      string  127.0.0.0/8
-postfix postfix/mailbox_limit   string  51200000
-postfix postfix/protocols       select  ipv4
-postfix postfix/mailname        string  myhost.local
 
