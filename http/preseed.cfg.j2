@@ -71,11 +71,11 @@ d-i     pkgsel/include string vim openssh-server sudo htop iotop rsync mc curl p
 
 d-i     preseed/late_command string \
 	in-target sed -i '/^#PermitRootLogin/c\PermitRootLogin yes' /etc/ssh/sshd_config; \
-  in-target mkdir -p /root/.ssh; \
-  in-target /bin/sh -c "echo '{{ vm_keys }}' > /root/.ssh/authorized_keys"; \
-  in-target chmod -R go-rwx /root/.ssh/authorized_keys; \
+	in-target mkdir -p /root/.ssh; \
+	in-target /bin/sh -c "echo '{{ vm_keys }}' > /root/.ssh/authorized_keys"; \
+	in-target chmod -R go-rwx /root/.ssh/authorized_keys; \
 	in-target sed -i 's/# alias ll/alias ll/g' /root/.bashrc; \
-  in-target sed -i 's/# alias ls/alias ls/g' /root/.bashrc; \
-  in-target sed -i 's/# alias l/alias l/g' /root/.bashrc; \
-  in-target sed -i 's/# export LS_OPTIONS/export LS_OPTIONS/g' /root/.bashrc; \
+	in-target sed -i 's/# alias ls/alias ls/g' /root/.bashrc; \
+	in-target sed -i 's/# alias l/alias l/g' /root/.bashrc; \
+	in-target sed -i 's/# export LS_OPTIONS/export LS_OPTIONS/g' /root/.bashrc; \
   in-target sed -i 's/# eval/eval/g' /root/.bashrc;
