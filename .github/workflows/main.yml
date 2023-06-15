@@ -2,12 +2,30 @@ name: Validate Packer
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+  workflow_dispatch:
+  schedule:
+    - cron: "0 1 * * 5" # every Friday at 1am UTC
+env:
+  PRODUCT_VERSION: "latest"
+
 jobs:
-  build:
+  packer:
     runs-on: ubuntu-latest
+    name: Run Packer
     steps:
-    - name: Validate Code
-      uses: dawitnida/packer-validate-action@v1.0.5
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup `packer`
+        uses: hashicorp/setup-packer@main
+        id: setup
+        with:
+          version: ${{ env.PRODUCT_VERSION }}
+
+      - name: Run `packer init`
+        id: init
+        run: "packer init ./debian-amd64-proxmox.pkr.hcl"
+
+      - name: Run `packer validate`
+        id: validate
+        run: "packer validate ./debian-amd64-proxmox.pkr.hcl"
