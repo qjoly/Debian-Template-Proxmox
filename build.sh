@@ -1,5 +1,7 @@
 #!/bin/bash
 
+packerfile="debian-amd64-proxmox.pkr.hcl"
+
 # Paramètres du Proxmox
 export proxmox_url="https://IP_PROXMOX:8006/api2/json"
 export proxmox_node="NOM_NOEUD"
@@ -12,13 +14,13 @@ export proxmox_iso_storage="local"
 export proxmox_network="vmbr0"
 
 # Ressources attribuées à la VM
-export vm_id=9002
-export vm_name="debian-11-tf"
+export vm_id=9000
+export vm_name="debian-12-tf"
 export template_description="VM debian"
 export vm_default_user="root"
 export vm_cpu=2
 export vm_disk="8G"
-export vm_memory=1024
+export vm_memory=2048
 
 # Paramètres de la VM Template
 export prefix_disk="vd"
@@ -32,8 +34,9 @@ export vm_keys=$(echo "$(cat ~/.ssh/id_ed25519.pub)")
 # set variables
 j2 http/preseed.cfg.j2 > http/preseed.cfg
 
-#PACKER_LOG=1 packer build debian-test.json
-packer build debian-11-amd64-proxmox.json
+#PACKER_LOG=1 packer build $packerfile
+packer init $packerfile
+packer build $packerfile
 
 rm -f http/preseed.cfg
 
