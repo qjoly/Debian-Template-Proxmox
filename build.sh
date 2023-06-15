@@ -32,7 +32,6 @@ export vm_keys=$(echo "$(cat ~/.ssh/id_ed25519.pub)")
 # set variables
 j2 http/preseed.cfg.j2 > http/preseed.cfg
 
-#sshpass -p "${proxmox_password}" ssh "${proxmox_ssh}" "wget ${iso_url} -P /var/lib/vz1/template/iso/"
 #PACKER_LOG=1 packer build debian-test.json
 packer build debian-11-amd64-proxmox.json
 
