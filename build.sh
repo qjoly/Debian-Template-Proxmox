@@ -8,8 +8,8 @@ export proxmox_node="NOM_NOEUD"
 export proxmox_username="root@pam"
 export proxmox_password="Password" # Il est préférable d'utiliser un utilisateur dédié à Proxmox
 export proxmox_vm_storage="local-zfs"
-export proxmox_iso_url="https://cdimage.debian.org/debian-cd/current/amd64/iso-cd/debian-11.6.0-amd64-netinst.iso"
-export proxmox_iso_checksum="sha256:e482910626b30f9a7de9b0cc142c3d4a079fbfa96110083be1d0b473671ce08d"
+export proxmox_iso_url="https://cdimage.debian.org/debian-cd/current/amd64/iso-cd/debian-12.1.0-amd64-netinst.iso"
+export proxmox_iso_checksum="sha256:9f181ae12b25840a508786b1756c6352a0e58484998669288c4eec2ab16b8559"
 export proxmox_iso_storage="local"
 export proxmox_network="vmbr0"
 
