@@ -95,7 +95,7 @@ variable "vm_id" {
 }
 
 variable "vm_memory" {
-  type    = string
+  type    = number 
   default = "${env("vm_memory")}"
 }
 
@@ -120,7 +120,7 @@ source "proxmox" "build-template" {
   iso_checksum             = "${var.proxmox_iso_checksum}"
   iso_storage_pool         = "${var.proxmox_iso_storage}"
   iso_url                  = "${var.proxmox_iso_url}"
-  memory                   = "${var.vm_memory}"
+  memory                   = var.vm_memory
   network_adapters {
     bridge = "${var.proxmox_network}"
     model  = "virtio"
