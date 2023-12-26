@@ -7,9 +7,9 @@ export proxmox_url="https://IP_PROXMOX:8006/api2/json"
 export proxmox_node="NOM_NOEUD"
 export proxmox_username="root@pam"
 export proxmox_password="Password" # Il est préférable d'utiliser un utilisateur dédié à Proxmox
-export proxmox_vm_storage="local-zfs"
-export proxmox_iso_url="https://cdimage.debian.org/debian-cd/current/amd64/iso-cd/debian-12.1.0-amd64-netinst.iso"
-export proxmox_iso_checksum="sha256:9f181ae12b25840a508786b1756c6352a0e58484998669288c4eec2ab16b8559"
+export proxmox_vm_storage="local-lvm"
+export proxmox_iso_url="https://cdimage.debian.org/debian-cd/current/amd64/iso-cd/debian-12.4.0-amd64-netinst.iso"
+export proxmox_iso_checksum="sha256:64d727dd5785ae5fcfd3ae8ffbede5f40cca96f1580aaa2820e8b99dae989d94"
 export proxmox_iso_storage="local"
 export proxmox_network="vmbr0"
 
@@ -18,8 +18,8 @@ export vm_id=9000
 export vm_name="debian-12-tf"
 export template_description="VM debian"
 export vm_default_user="root"
-export vm_cpu=2
-export vm_disk="8G"
+export vm_cpu=4
+export vm_disk="16G"
 export vm_memory=2048
 
 # Paramètres de la VM Template
