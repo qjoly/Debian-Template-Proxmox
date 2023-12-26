@@ -1,0 +1,5 @@
+repos:
+- repo: https://github.com/sirosen/fix-smartquotes
+  rev: 0.1.1
+  hooks:
+    - id: fix-smartquotes
