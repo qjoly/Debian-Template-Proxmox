@@ -16,8 +16,4 @@
       user: root 
       state: present
       key: "{{ lookup('pipe','cat ../ssh/*.pub') }}"
-#    with_file:
-#      - ../ssh/*.pub
-      #      - ../ssh/*.pub
-      #    loop: "{{ lookup('fileglob', '../ssh/*.pub', wantlist=True) }}"
 

@@ -1,34 +1,26 @@
 ---
 - hosts: all
-#  collections:
-#    - community.crypto
-#    - ansible.posix
-
-#  remote_user: deploy
-#  become: yes
-#  become_user: root
-#  become_method: sudo
-
   gather_facts: true
-
   vars:
     ansible_python_interpreter: /usr/bin/python3
 
   tasks:
   - name: "Install packages"
     apt:
-      name: "{{item}}"
       state: present
-    loop:
-      - vim
-      - exa
-      - grc
-      - most
-      - highlight
-      - source-highlight
-      - python3-pygments
-      - gawk
-      - python3-apt
+      name:
+        - vim
+        - exa
+        - grc
+        - most
+        - highlight
+        - source-highlight
+        - python3-pygments
+        - gawk
+        - python3-apt
+        - tmux
+        - htop
+        - fdisk
 
   - name: configure .vimrc
     copy:
@@ -153,10 +145,5 @@
   - name: config .bashrc set Prompt
     lineinfile:
       path: /root/.bashrc
-#      line: 'export PS1="\[\033[1;31m\]\u\[\033[0;37m\]@\[\033[1;32m\]\h\[\033[00m\]:\[\033[1;34m\]\w\[\033[00m\] (\d - \t)\n\$ '"
       line: "export PS1='\\[\\033[1;31m\\]\\u\\[\\033[0;37m\\]@\\[\\033[1;32m\\]\\h\\[\\033[00m\\]:\\[\\033[1;34m\\]\\w\\[\\033[00m\\] (\\d - \\t)\\n\\$ '"
       create: no
-
-#  - name: sourcing .bashrc
-#    shell: . ~/.bashrc
-

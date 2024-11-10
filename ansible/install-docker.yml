@@ -1,19 +1,10 @@
 - hosts: all
-
   remote_user: deploy
   become: yes
   become_user: root
   become_method: sudo
 
-  vars:
-    docker_compose_version: "2.2.2"
-
   tasks:
-#    - name: Wait 300 seconds, but only start checking after 30 seconds
-#      wait_for_connection:
-#        delay: 30
-#        timeout: 300
-
     - name: Update all packages to the latest version
       apt:
         upgrade: dist
@@ -58,37 +49,3 @@
           - docker-ce-cli
           - containerd.io
         state: present
-
-    - name: Install Docker-py
-      pip:
-        name: docker
-
-#    - name: Install Docker Compose 1.29.1
-#      get_url:
-#        url: https://github.com/docker/compose/releases/download/1.29.1/docker-compose-Linux-x86_64
-#        dest: /usr/local/bin/docker-compose
-#        mode: 0755
-
-
-    - name: Check current docker-compose version.
-      command: docker-compose --version
-      register: docker_compose_vsn
-      changed_when: false
-      failed_when: false
-      check_mode: no
-
-    - set_fact:
-        docker_compose_current_version: "{{ docker_compose_vsn.stdout | regex_search('(\\d+(\\.\\d+)+)') }}"
-      when:
-        - docker_compose_vsn.stdout is defined
-
-    - name: Install or upgrade docker-compose
-      get_url: 
-        url : "https://github.com/docker/compose/releases/download/v{{ docker_compose_version }}/docker-compose-Linux-x86_64"
-        dest: /usr/local/bin/docker-compose
-        mode: 'a+x'
-        force: yes
-      when: >
-        docker_compose_current_version is not defined
-        or docker_compose_current_version is version(docker_compose_version, '<') 
-
