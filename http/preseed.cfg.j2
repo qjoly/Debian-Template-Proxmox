@@ -52,7 +52,6 @@ d-i     clock-setup/utc boolean true
 d-i     clock-setup/ntp boolean true
 d-i     clock-setup/ntp-server  string ntp.ubuntu.com
 d-i     time/zone string Europe/Paris
-#d-i     base-installer/kernel/image     string linux-server
 d-i     pkgsel/upgrade  select safe-upgrade
 d-i     pkgsel/language-packs   multiselect 
 d-i     pkgsel/update-policy    select none
@@ -65,7 +64,7 @@ d-i     cdrom-detect/eject      boolean true
 d-i     debian-installer/exit/halt      boolean false
 d-i     debian-installer/exit/poweroff  boolean false
 
-#d-i	  debian-installer/add-kernel-opts string net.ifnames=0 biosdevname=0 
+d-i	  debian-installer/add-kernel-opts string net.ifnames=0 biosdevname=0 
 
 d-i     pkgsel/include string vim openssh-server sudo htop iotop rsync mc curl python3 python3-pip python3-apt dnsutils net-tools net-tools gnupg2 wget hostname ansible qemu-guest-agent parted
 
@@ -78,4 +77,4 @@ d-i     preseed/late_command string \
 	in-target sed -i 's/# alias ls/alias ls/g' /root/.bashrc; \
 	in-target sed -i 's/# alias l/alias l/g' /root/.bashrc; \
 	in-target sed -i 's/# export LS_OPTIONS/export LS_OPTIONS/g' /root/.bashrc; \
-  in-target sed -i 's/# eval/eval/g' /root/.bashrc;
+    in-target sed -i 's/# eval/eval/g' /root/.bashrc;
